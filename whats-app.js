@@ -1,8 +1,9 @@
+
 function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSetting: {}, enabled: false }) {
 
-    const defaults = {
+    const option = {
         brandSetting: {
-            autoShow: true,
+            autoShow: false,
             backgroundColor: '#0a6114',
             borderRadius: '25',
             brandImg: 'https://southpointe.tech/content/images/2022/12/spt-logo.png',
@@ -26,14 +27,12 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
         enabled: false
     }
 
-    const options = { brandSetting: {}, chatButtonSetting: {}, enabled: false };
+    Object.assign(option.brandSetting, _option.brandSetting);
+    Object.assign(option.chatButtonSetting, _option.chatButtonSetting);
 
-    Object.assign(options.brandSetting, defaults.brandSetting, _options.brandSetting);
-    Object.assign(options.chatButtonSetting, defaults.chatButtonSetting, _options.chatButtonSetting);
-    Object.assign(options.brandSetting, defaults.brandSetting, _options.brandSetting);
+    option.enabled = _option.enabled;
 
-    
-    if (option.enabled == false) {
+    if (option.enabled === false) {
         return;
     }
 
@@ -43,8 +42,6 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
         option.chatButtonSetting.marginLeft = '0';
         option.chatButtonSetting.marginRight = '20';
     }
-
-    var css = document.createElement('STYLE');
 
     if (option.brandSetting.messageText) {
         option.brandSetting.messageText = option.brandSetting.messageText.replaceAll('{{page_link}}', encodeURIComponent(window.location.href));
@@ -63,7 +60,7 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
                 <div style="color: white; font-size: 18px">${option.chatButtonSetting.ctaText}</div>
             </div>
         </div>
-    `;
+    `.trim();
 
     const wachatbox = document.createElement('div');
 
@@ -77,48 +74,47 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
                 </div>
                 <div class="wa-chat-bubble-close-btn"><img style="display: table-row" src="https://cdn.shopify.com/s/files/1/0070/3666/5911/files/Vector.png?574"></div>
             </div>
-            
+
             <div class='wa-chat-box-content'>
-                <div class='wa-chat-box-content-chat'>                            
+                <div class='wa-chat-box-content-chat'>
                     <div class='wa-chat-box-content-chat-brand'>${option.brandSetting.brandName}</div>
                     <div class='wa-chat-box-content-chat-welcome'>${option.brandSetting.welcomeText.replace(/\n/g, '<br/>')}</div>
                 </div>
             </div>
-            
+
             <div class='wa-chat-box-send'>
                 <a role="button" target="_blank" href="https://api.whatsapp.com/send?phone=${option.brandSetting.phoneNumber.replace(/\+/g, '')}&text=${option.brandSetting.messageText ? option.brandSetting.messageText : ''}" title="WhatsApp" class="wa-chat-box-content-send-btn"><svg width="20" height="20" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" class="wa-chat-box-content-send-btn-icon"><path d="M90,43.841c0,24.213-19.779,43.841-44.182,43.841c-7.747,0-15.025-1.98-21.357-5.455L0,90l7.975-23.522   c-4.023-6.606-6.34-14.354-6.34-22.637C1.635,19.628,21.416,0,45.818,0C70.223,0,90,19.628,90,43.841z M45.818,6.982   c-20.484,0-37.146,16.535-37.146,36.859c0,8.065,2.629,15.534,7.076,21.61L11.107,79.14l14.275-4.537   c5.865,3.851,12.891,6.097,20.437,6.097c20.481,0,37.146-16.533,37.146-36.857S66.301,6.982,45.818,6.982z M68.129,53.938   c-0.273-0.447-0.994-0.717-2.076-1.254c-1.084-0.537-6.41-3.138-7.4-3.495c-0.993-0.358-1.717-0.538-2.438,0.537   c-0.721,1.076-2.797,3.495-3.43,4.212c-0.632,0.719-1.263,0.809-2.347,0.271c-1.082-0.537-4.571-1.673-8.708-5.333   c-3.219-2.848-5.393-6.364-6.025-7.441c-0.631-1.075-0.066-1.656,0.475-2.191c0.488-0.482,1.084-1.255,1.625-1.882   c0.543-0.628,0.723-1.075,1.082-1.793c0.363-0.717,0.182-1.344-0.09-1.883c-0.27-0.537-2.438-5.825-3.34-7.977   c-0.902-2.15-1.803-1.792-2.436-1.792c-0.631,0-1.354-0.09-2.076-0.09c-0.722,0-1.896,0.269-2.889,1.344   c-0.992,1.076-3.789,3.676-3.789,8.963c0,5.288,3.879,10.397,4.422,11.113c0.541,0.716,7.49,11.92,18.5,16.223   C58.2,65.771,58.2,64.336,60.186,64.156c1.984-0.179,6.406-2.599,7.312-5.107C68.398,56.537,68.398,54.386,68.129,53.938z"></path></svg>
                     <span class="wa-chat-box-content-send-btn-text">${option.brandSetting.ctaText}</span>
                 </a>
             </div>
         </div>
-    `;
+    `.trim();
 
-    const container = div.firstChild;
+    document.body.appendChild(div.firstElementChild);
+    const container = document.querySelector('#whatsapp_chat_widget');
+
     /**
      * @type {HTMLElement}
      */
-    const chatbox  = wachatbox.firstChild;
-    const sendBtn = container.firstChild;
-    const closeBtn = chatbox.querySelector('.wa-chat-bubble-close-btn');
+    const chatbox  = wachatbox.firstElementChild;
+    const sendBtn = container.firstElementChild;
 
-
-    document.body.appendChild(container);
     container.appendChild(chatbox);
 
+    const closeBtn = chatbox.querySelector('.wa-chat-bubble-close-btn');
+
+    const open = () => (chatbox.style.display = 'block');
+    const close = () => (chatbox.style.display = 'none');
+
     if (option.brandSetting.autoShow) {
-        chatbox.style.display = 'block';
+        open()
     }
     else {
-        chatbox.style.display = 'none';
+        close()
     }
 
-    sendBtn.addEventListener('click', () => {
-        chatbox.style.display = 'block';
-    });
-    closeBtn.addEventListener('click', () => {
-        chatbox.style.display = 'close';
-    });
-
+    sendBtn.addEventListener('click', () => open());
+    closeBtn.addEventListener('click', () => close());
 
     var styles = `
         #whatsapp_chat_widget{
@@ -139,7 +135,7 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
         }
         .wa-chat-box-content-send-btn{
             text-decoration: none;
-            color: rgb(255, 255, 255)!important;
+            color: rgb(255, 255, 255);
             font-size: 15px;
             font-weight: 700;
             line-height: 20px;
@@ -157,7 +153,7 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
             border-style: none;
             border-color: initial;
             border-image: initial;
-            background-color: ${option.chatButtonSetting.backgroundColor}!important;
+            background-color: ${option.chatButtonSetting.backgroundColor};
             margin: 20px;
             overflow: hidden;
         }
@@ -165,13 +161,13 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
             background-color:white;
 
         }
-        .wa-chat-box-content-chat-brand{        
+        .wa-chat-box-content-chat-brand{
             font-size: 13px;
             font-weight: 700;
             line-height: 18px;
             color: rgba(0, 0, 0, 0.4);
         }
-        .wa-chat-box-content-chat-welcome{        
+        .wa-chat-box-content-chat-welcome{
             font-size: 14px;
             line-height: 19px;
             margin-top: 4px;
@@ -186,7 +182,7 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
         }
         .wa-chat-box-content{
             background: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            
+
         }
         .wa-chat-bubble-close-btn{
             cursor: pointer;
@@ -207,7 +203,7 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
             line-height: 18px;
             margin-top: 4px;
         }
-        
+
         .wa-chat-box-header{
             height: 100px;
             max-height: 100px;
@@ -227,29 +223,29 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
         }
         .wa-chat-box{
             background-color:white;
-            z-index: 16000160 !important;
+            z-index: 16000160 ;
             margin-bottom: 60px;
             width: 360px;
-            position: fixed !important;
-            bottom: ${option.chatButtonSetting.marginBottom}px !important;
+            position: fixed ;
+            bottom: ${option.chatButtonSetting.marginBottom}px ;
             ${option.chatButtonSetting.position == 'left' ? 'left : ' + option.chatButtonSetting.marginLeft + 'px' : 'right : ' + option.chatButtonSetting.marginRight + 'px'};
             border-radius: 10px;
             box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
             font: 400 normal 15px/1.3 -apple-system, BlinkMacSystemFont, Roboto, Open Sans, Helvetica Neue, sans-serif;
         }
         #wa-widget-send-button {
-            margin: 0 0 ${option.chatButtonSetting.marginBottom}px 0 !important;      
+            margin: 0 0 ${option.chatButtonSetting.marginBottom}px 0 ;
             padding-left: ${option.chatButtonSetting.ctaText ? '15px' : '0px'};
             padding-right: ${option.chatButtonSetting.ctaText ? '15px' : '0px'};
-            position: fixed !important;
-            z-index: 16000160 !important;
-            bottom: 0 !important;
-            text-align: center !important;
+            position: fixed ;
+            z-index: 16000160 ;
+            bottom: 0 ;
+            text-align: center ;
             height: 50px;
             min-width: 50px;
             border-radius: ${option.chatButtonSetting.borderRadius}px;
             visibility: visible;
-            transition: none !important;
+            transition: none ;
             background-color: ${option.chatButtonSetting.backgroundColor};
             box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
             ${option.chatButtonSetting.position == 'left' ? 'left : ' + option.chatButtonSetting.marginLeft + 'px' : 'right : ' + option.chatButtonSetting.marginRight + 'px'};
@@ -277,15 +273,15 @@ function CreateWhatsappChatWidget(_option = { brandSetting: {}, chatButtonSettin
             .wa-chat-box
             {
                 width: auto;
-                position: fixed !important;
-                right: 20px!important;
-                left: 20px!important;
+                position: fixed ;
+                right: 20px;
+                left: 20px;
             }
         }
     `;
 
     var styleSheet = document.createElement('style');
-    styleSheet.type = 'text/css';
+    styleSheet.setAttribute('type', 'text/css');
     styleSheet.innerText = styles;
     document.getElementsByTagName('head')[0].appendChild(styleSheet);
 }
